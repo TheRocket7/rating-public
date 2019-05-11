@@ -1,6 +1,6 @@
-# y
+# Rating public
 
-> y
+> Rating public
 
 ## Build Setup
 
