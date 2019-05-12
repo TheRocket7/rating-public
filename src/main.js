@@ -7,16 +7,14 @@ import BootstrapVue from 'bootstrap-vue'
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 import { library, dom } from '@fortawesome/fontawesome-svg-core'
-import { faUserSecret, faCar, faSpinner  } from '@fortawesome/free-solid-svg-icons'
+import { faCheckCircle, faChartLine, faCogs, faGrin, faSmile, faMeh, faFrown, faSadTear } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
 dom.watch()
 
 Vue.use(BootstrapVue);
 
-library.add(faUserSecret);
-library.add(faCar);
-library.add(faSpinner);
+library.add(faCheckCircle, faChartLine, faCogs, faGrin, faSmile, faMeh, faFrown, faSadTear);
 
 Vue.component('font-awesome-icon', FontAwesomeIcon);
 
