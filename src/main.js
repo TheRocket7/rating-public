@@ -7,7 +7,7 @@ import BootstrapVue from 'bootstrap-vue'
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 import { library, dom } from '@fortawesome/fontawesome-svg-core'
-import { faUserSecret } from '@fortawesome/free-solid-svg-icons'
+import { faUserSecret, faCar, faSpinner  } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
 dom.watch()
@@ -15,6 +15,8 @@ dom.watch()
 Vue.use(BootstrapVue);
 
 library.add(faUserSecret);
+library.add(faCar);
+library.add(faSpinner);
 
 Vue.component('font-awesome-icon', FontAwesomeIcon);
 

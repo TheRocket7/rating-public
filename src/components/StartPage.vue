@@ -6,7 +6,7 @@
         <b-button size="lg"><i class="fas fa-user-secret"></i> Rate Us</b-button>
       </div>
       <div class="col-xl-6 right">
-        <b-button size="lg" variant="success"><i class="fas fa-chart-line"></i> Statistics</b-button>
+        <b-button size="lg" variant="success"><i class="fas fa-car"></i> Statistics</b-button>
       </div>
     </div>
   </div>
