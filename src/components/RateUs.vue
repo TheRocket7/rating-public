@@ -3,7 +3,7 @@
         <div class="d-block text-center">
             <h3>{{ title }}</h3>
         </div>
-        <div class="row">
+        <div class="row" v-if="changes.numberOfRates == 5">
             <div class="col-xl-1"></div>
             <div class="col-xl-2">
                 <b-button size="lg" @click="clickRateSmile" variant="success" class="btn-size"><i class="fas fa-grin"></i></b-button>
@@ -23,9 +23,41 @@
             <div class="col-xl-1"></div>
         </div>
 
-        <b-modal ref="message-modal" hide-footer title="Info" no-close-on-esc no-close-on-backdrop hide-header-close>
+        <div class="row" v-if="changes.numberOfRates == 4">
+            <div class="col-xl-2"></div>
+            <div class="col-xl-2">
+                <b-button size="lg" @click="clickRateSmile" variant="success" class="btn-size"><i class="fas fa-grin"></i></b-button>
+            </div>
+            <div class="col-xl-2">
+                <b-button size="lg" @click="clickRateSmile" class="btn-size"><i class="fas fa-smile"></i></b-button>
+            </div>
+            <div class="col-xl-2">
+                <b-button size="lg" @click="clickRateSmile" variant="warning" class="btn-size"><i class="fas fa-meh"></i></b-button>
+            </div>
+            <div class="col-xl-2">
+                <b-button size="lg" @click="clickRateSmile" variant="danger" class="btn-size"><i class="fas fa-sad-tear"></i></b-button>
+            </div>
+            <div class="col-xl-2"></div>
+        </div>
+
+        <div class="row" v-if="changes.numberOfRates == 3">
+            <div class="col-xl-3"></div>
+            <div class="col-xl-2">
+                <b-button size="lg" @click="clickRateSmile" variant="success" class="btn-size"><i class="fas fa-grin"></i></b-button>
+            </div>
+            <div class="col-xl-2">
+                <b-button size="lg" @click="clickRateSmile" variant="warning" class="btn-size"><i class="fas fa-meh"></i></b-button>
+            </div>
+            <div class="col-xl-2">
+                <b-button size="lg" @click="clickRateSmile" variant="danger" class="btn-size"><i class="fas fa-sad-tear"></i></b-button>
+            </div>
+            <div class="col-xl-3"></div>
+        </div>
+
+
+        <b-modal ref="message-modal" size="lg" hide-footer title="Info" no-close-on-esc centered no-close-on-backdrop hide-header-close>
         <div class="d-block text-center">
-            <h3>{{ thankYouMessage }}</h3>
+            <h3>{{ changes.thanksMessage }}</h3>
         </div>
         </b-modal>
     </div>
@@ -34,11 +66,12 @@
 <script>
     export default {
         name: 'RateUs',
+        props: {
+            changes: Object
+        },
         data () {
             return {
-                title: `How do you like our work?`,
-                waitCloseModal: 5000,
-                thankYouMessage: `Thank you for helping us improve ourselves!` 
+                title: `How do you like our work?`
             }
         },
         methods: {
@@ -46,7 +79,7 @@
                 this.$refs['message-modal'].show()
                 setTimeout(() => {
                     this.$refs['message-modal'].hide()
-                }, waitCloseModal);
+                }, (this.changes.modalWait * 1000));
             }
         }
     }

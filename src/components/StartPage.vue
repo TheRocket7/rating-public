@@ -15,16 +15,16 @@
             </div>
         </div>
 
-        <b-modal ref="rate-modal" size="lg" hide-footer title="Rate Us">
-            <rate-us />
+        <b-modal ref="rate-modal" size="lg" hide-footer centered title="Rate Us">
+            <rate-us :changes="settingsData" />
         </b-modal>
 
-        <b-modal ref="statistics-modal" size="xl" hide-footer title="Statistics">
+        <b-modal ref="statistics-modal" size="xl" hide-footer centered title="Statistics">
             <statistics />
         </b-modal>
 
-        <b-modal ref="settings-modal" size="lg" hide-footer title="Settings">
-            <settings v-on:getChangedSettings="settingsChanged" />
+        <b-modal ref="settings-modal" size="lg" hide-footer centered title="Settings">
+            <settings :changes="settingsData" v-on:getChangedSettings="settingsChanged" />
         </b-modal>
     </div>
 </template>
@@ -38,7 +38,12 @@
         name: 'StartPage',
         data () {
             return {
-                title: 'Welcome to our rate application!'
+                title: 'Welcome to our rate application!',
+                settingsData: {
+                    thanksMessage: `Thank you for helping us improve ourselves!`,
+                    numberOfRates: 3,
+                    modalWait: 5
+                }
             }
         },
         methods: {
@@ -55,8 +60,9 @@
                 this.$refs['settings-modal'].show()
             },
             settingsChanged(changes) {
-                this.$refs['settings-modal'].hide()
-                console.log("Izmjene: ", changes)
+                this.$refs['settings-modal'].hide();
+                console.log("Izmjene: ", changes);
+                this.settingsData = changes;
             }
         },
         components: {
@@ -67,8 +73,7 @@
     }
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
+<style>
     h1, h2 {
         font-weight: normal;
     }
@@ -90,4 +95,11 @@
         font-size: 35px;
         margin-top: 10px;
     }
+
+    @media (min-width: 1920px) {
+        .modal-xl {
+            max-width: 1835px;
+        }
+    }
+    
 </style>

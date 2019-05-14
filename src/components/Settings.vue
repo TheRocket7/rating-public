@@ -7,6 +7,7 @@
         <div class="option">
             <label>{{ changeThanksText }}</label>
             <b-form-input v-model="changes.thanksMessage" class="col-xl-12"></b-form-input>
+            <span v-if="showWarning" class="warning-message">Message need to be longer than 3 characters, and shorter than 120 characters!</span>
         </div>
         <div class="option">
             <label>{{ changeModalWait }}</label>
@@ -21,16 +22,15 @@
 <script>
     export default {
         name: 'Settings',
+        props: {
+            changes: Object
+        },
         data () {
             return {
                 changeThanksText: `Thank you message:`,
                 changeModalWait: `Thank you message timeout:`,
                 changeNumberOfRates: `Number of emotions:`,
-                changes: {
-                    thanksMessage: `Thank you for helping us improve ourselves!`,
-                    numberOfRates: 3,
-                    modalWait: 5
-                },
+                showWarning: false,
                 optionsNumberOFRates: [
                     { value: 3, text: '3' },
                     { value: 4, text: '4' },
@@ -48,12 +48,19 @@
                     { value: 8, text: '8' },
                     { value: 9, text: '9' },
                     { value: 10, text: '10' },
+                ],
+                inputRules: [
+                    v => v.length >= 3 || 'Minimum length is 3 characters'
                 ]
             }
         },
         methods: {
             saveChanges() {
-                this.$emit('getChangedSettings', this.changes);
+                if(this.changes.thanksMessage.length <= 3 || this.changes.thanksMessage.length >= 120) {
+                    this.showWarning = true;
+                } else {
+                    this.$emit('getChangedSettings', this.changes);
+                }
             }
         }
     }
@@ -69,5 +76,9 @@
     }
     .right {
         text-align: right;
+    }
+    .warning-message {
+        font-size: 14px;
+        color: red;
     }
 </style>
