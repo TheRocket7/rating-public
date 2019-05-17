@@ -1,48 +1,51 @@
 <template>
     <div class="statistics">
-        <div class="d-block text-center">
+        <div class="text-left back-button">
+            <b-button size="lg" @click="goBack"><i class="fas fa-arrow-left"></i> Back</b-button>
+        </div>
+        <div class="d-block text-center title-margin">
             <h3>{{ title }}</h3>
         </div>
-        <div class="small">
-            <line-chart :chart-data="datacollection"></line-chart>
-            <button @click="fillData()">Randomize</button>
+        <div class="col-xl-12 tabs-margin">
+            <b-tabs content-class="mt-3">
+                <b-tab title="Today" active @click="updateTodayCharts">
+                    <today :settings="settings" ref="today" />
+                </b-tab>
+                <b-tab title="Report" @click="updateReportCharts">
+                    <report :settings="settings" ref="report" />
+                </b-tab>
+            </b-tabs>
         </div>
     </div>
 </template>
 
 <script>
-    import LineChart from './LineChart.js'
+    import Report from './Report.vue'
+    import Today from './Today.vue'
 
     export default {
         name: 'Statistics',
+        props: {
+            settings: Object
+        },
         data () {
             return {
-                title: `We follow all rates and here is statistic about that! :D`,
-                datacollection: {}
+                title: `We follow all rates and here is statistic about that! :D`
             }
         },
         components: {
-            LineChart
+            Report,
+            Today
         },
         methods: {
-            fillData () {
-                this.datacollection = {
-                labels: [this.getRandomInt(), this.getRandomInt()],
-                datasets: [
-                    {
-                    label: 'Data One',
-                    backgroundColor: '#f87979',
-                    data: [this.getRandomInt(), this.getRandomInt()]
-                    }, {
-                    label: 'Data One',
-                    backgroundColor: '#f87979',
-                    data: [this.getRandomInt(), this.getRandomInt()]
-                    }
-                ]
-                }
+            goBack() {
+                this.$router.push({name:'Start page'});
             },
-            getRandomInt () {
-                return Math.floor(Math.random() * (50 - 5 + 1)) + 5
+            updateTodayCharts() {
+                this.$refs.today.pullData(new Date());
+            },
+            updateReportCharts() {
+                this.$refs.report.pullData(new Date());
             }
         }
     }
@@ -50,8 +53,14 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-    .small {
-        max-width: 600px;
-        margin:  150px auto;
+    .title-margin {
+        margin-bottom: 65px;
+    }
+    .back-button {
+        margin-left: 30px; 
+    }
+    .tabs-margin {
+        margin-left: 15px !important;
+        padding-right: 45px !important;
     }
 </style>

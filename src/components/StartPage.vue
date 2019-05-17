@@ -1,5 +1,6 @@
 <template>
     <div class="start-page">
+        <img src="./../assets/logo.png">
         <h1>{{ title }}</h1>
         <div class="row">
             <div class="col-xl-6 left">
@@ -19,10 +20,6 @@
             <rate-us :changes="settingsData" />
         </b-modal>
 
-        <b-modal ref="statistics-modal" size="xl" hide-footer centered title="Statistics">
-            <statistics />
-        </b-modal>
-
         <b-modal ref="settings-modal" size="lg" hide-footer centered title="Settings">
             <settings :changes="settingsData" v-on:getChangedSettings="settingsChanged" />
         </b-modal>
@@ -33,6 +30,7 @@
     import RateUs from './RateUs.vue';
     import Statistics from './Statistics.vue';
     import Settings from './Settings.vue';
+    import Router from './../router/index'
 
     export default {
         name: 'StartPage',
@@ -54,13 +52,13 @@
                 this.$refs['rate-modal'].hide()
             },
             showStatisticsModal() {
-                this.$refs['statistics-modal'].show()
+                //this.$refs['statistics-modal'].show()
+                this.$router.push({name:'Statistics', params: {settings: this.settingsData}});
             },
             showSettingsModal() {
                 this.$refs['settings-modal'].show()
             },
             settingsChanged(changes) {
-                this.$refs['settings-modal'].hide();
                 console.log("Izmjene: ", changes);
                 this.settingsData = changes;
             }

@@ -2,19 +2,16 @@
     <div class="settings">
         <div class="option">
             <label>{{ changeNumberOfRates }}</label>
-            <b-form-select v-model="changes.numberOfRates" :options="optionsNumberOFRates" class="col-xl-12"></b-form-select>
+            <b-form-select v-model="changes.numberOfRates" :options="optionsNumberOFRates" @change="saveChanges" class="col-xl-12"></b-form-select>
         </div>
         <div class="option">
             <label>{{ changeThanksText }}</label>
-            <b-form-input v-model="changes.thanksMessage" class="col-xl-12"></b-form-input>
+            <b-form-input v-model="changes.thanksMessage" @input="saveChanges" class="col-xl-12"></b-form-input>
             <span v-if="showWarning" class="warning-message">Message need to be longer than 3 characters, and shorter than 120 characters!</span>
         </div>
         <div class="option">
             <label>{{ changeModalWait }}</label>
-            <b-form-select v-model="changes.modalWait" :options="optionsModalWait" class="col-xl-12"></b-form-select>
-        </div>
-        <div class="right">
-            <b-button @click="saveChanges">Save</b-button>
+            <b-form-select v-model="changes.modalWait" :options="optionsModalWait" @change="saveChanges" class="col-xl-12"></b-form-select>
         </div>
     </div>
 </template>
