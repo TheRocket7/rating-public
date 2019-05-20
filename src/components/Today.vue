@@ -38,6 +38,7 @@
 <script>
     import { GChart } from 'vue-google-charts'
     import { mapMutations, mapState } from 'vuex'
+    import axios from "axios";
 
     export default {
         name: 'Today',
@@ -55,10 +56,15 @@
         },
         methods: {
             pullData(date) {
-                this.$store.commit('updateDataLine');
-                this.$store.commit('updateDataPie');
-                this.tableData = this.updatedChartDataPie;
-                console.log(date);
+                axios({ method: "GET", "url": "http://localhost:52832/api/ratings" }).then(result => {
+                    console.log(result);
+                    this.$store.commit('updateDataLine');
+                    this.$store.commit('updateDataPie');
+                    this.tableData = this.updatedChartDataPie;
+                    console.log(date);
+                }, error => {
+                    console.error(error);
+                });
             }
         },  
         computed: {
