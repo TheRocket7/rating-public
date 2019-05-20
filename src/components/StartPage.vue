@@ -1,5 +1,6 @@
 <template>
     <div class="start-page">
+        <div class="g-signin2" data-onsuccess="onSignIn"></div>
         <img src="./../assets/logo.png">
         <h1>{{ title }}</h1>
         <div class="row">
@@ -61,6 +62,13 @@
             settingsChanged(changes) {
                 console.log("Izmjene: ", changes);
                 this.settingsData = changes;
+            },
+            onSignIn(googleUser) {
+                var profile = googleUser.getBasicProfile();
+                console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
+                console.log('Name: ' + profile.getName());
+                console.log('Image URL: ' + profile.getImageUrl());
+                console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
             }
         },
         components: {
@@ -98,6 +106,10 @@
         .modal-xl {
             max-width: 1835px;
         }
+    }
+
+    .g-signin2 {
+        margin-left: 1765px;
     }
     
 </style>

@@ -53,7 +53,7 @@
         },
         methods: {
             saveChanges() {
-                if(this.changes.thanksMessage.length <= 3 || this.changes.thanksMessage.length >= 120) {
+                if((this.changes.thanksMessage.length <= 3 && this.changes.thanksMessage.length != 0) || this.changes.thanksMessage.length >= 120) {
                     this.showWarning = true;
                 } else {
                     this.$emit('getChangedSettings', this.changes);
