@@ -39,6 +39,7 @@
     import { GChart } from 'vue-google-charts'
     import { mapMutations, mapState } from 'vuex'
     import axios from "axios";
+     import moment from "moment";
 
     export default {
         name: 'Today',
@@ -56,7 +57,7 @@
         },
         methods: {
             pullData(date) {
-                axios({ method: "GET", "url": "http://localhost:52832/api/ratings" }).then(result => {
+                axios({ method: "GET", "url": "http://localhost:52832/api/stats?date=" + moment(date).format('YYYY-MM-DD') }).then(result => {
                     console.log(result);
                     this.$store.commit('updateDataLine');
                     this.$store.commit('updateDataPie');
