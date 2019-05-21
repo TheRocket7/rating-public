@@ -2,7 +2,8 @@ export default {
   chartOptionsLine: {
     chart: {
       title: "Report",
-      subtitle: "Report line chart"
+      subtitle: "Report line chart",
+      height: 1800
     }
   },
   chartDataHeaderLine: ["Year", "Great", "Good", "Meh", "Bad", "Awfull"],

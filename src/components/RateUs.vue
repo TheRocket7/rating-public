@@ -79,21 +79,26 @@
         },
         methods: {
             clickRateSmile() {
+                let dateForBase = moment(new Date()).toDate();
+                dateForBase.setMinutes(0);
+                dateForBase.setSeconds(0);
                 let dataToSend = {
                     RatingValueId: 1, 
                     User: 'Tester', 
-                    Date: moment().format('YYYY-MM-DD')
+                    Date: dateForBase
                     };
-                axios({ method: "POST", "url": "http://localhost:52832/api/ratings", data: dataToSend }).then(result => {
-                  console.log(result);
-         //         this.$store.commit('updateData', result);
-                 }, error => {
-                   console.error(error);
-                 });
-                this.$refs['message-modal'].show()
-                setTimeout(() => {
-                    this.$refs['message-modal'].hide()
-                }, (this.changes.modalWait * 1000));
+                console.log(dataToSend);
+                axios({ method: "POST", "url": "http://localhost:52832/api/ratings", data: dataToSend })
+                    .then(result => {
+                        console.log(result);
+                        this.$refs['message-modal'].show()
+                        setTimeout(() => {
+                            this.$refs['message-modal'].hide()
+                        }, (this.changes.modalWait * 1000));
+                    }, error => {
+                        console.error(error);
+                    });
+                
             }
         }
     }

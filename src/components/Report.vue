@@ -62,16 +62,15 @@
         },
         methods: {
             pullData(date) {
-                 axios({ method: "GET", "url": "http://localhost:52832/api/stats?date=" + moment(date).format('YYYY-MM-DD') }).then(result => {
-                  console.log(result);
-         //         this.$store.commit('updateData', result);
-                 }, error => {
-                   console.error(error);
-                 });
-           //     this.$store.commit('updateDataLine');
-          //      this.$store.commit('updateDataPie');
-           //     this.tableData = this.updatedChartDataPie;
-                //console.log(date);
+                axios({ method: "GET", "url": "http://localhost:52832/api/stats?date=" + moment(date).format('YYYY-MM-DD') })
+                    .then((result) => {
+                        this.$store.commit('updateData', result);
+                        this.$store.commit('updateDataLine');
+                        this.$store.commit('updateDataPie');
+                        this.tableData = this.updatedChartDataPie;
+                    }, error => {
+                        console.error(error);
+                    });
             }
         },  
         computed: {
@@ -92,14 +91,6 @@
             }
         },
         created () {
-            // axios({ method: "GET", "url": "http://localhost:52832/api/stats?date=" + moment(state.dateForData).format('YYYY-MM-DD') }).then(result => {
-            //   console.log(result);
-            //   this.$store.commit('updateData', result);
-            // }, error => {
-            //   console.error(error);
-            // });
-            this.$store.commit('updateDataLine');
-            this.$store.commit('updateDataPie');
         }
     }
 </script>
