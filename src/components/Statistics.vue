@@ -42,7 +42,7 @@
                 this.$router.push({name:'Start page'});
             },
             updateTodayCharts() {
-                this.$refs.today.pullData(new Date());
+                this.$refs.today.pullData();
             },
             updateReportCharts() {
                 this.$refs.report.pullData(new Date());

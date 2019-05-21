@@ -42,6 +42,8 @@
     import { GChart } from 'vue-google-charts'
     import Datepicker from 'vuejs-datepicker'
     import { mapMutations, mapState } from 'vuex'
+    import axios from "axios";
+    import moment from "moment";
 
     export default {
         name: 'Report',
@@ -60,10 +62,16 @@
         },
         methods: {
             pullData(date) {
+                // axios({ method: "GET", "url": "http://localhost:52832/api/stats?date=" + moment(state.dateForData).format('YYYY-MM-DD') }).then(result => {
+                //   console.log(result);
+                //   this.$store.commit('updateData', result);
+                // }, error => {
+                //   console.error(error);
+                // });
                 this.$store.commit('updateDataLine');
                 this.$store.commit('updateDataPie');
                 this.tableData = this.updatedChartDataPie;
-                console.log(date);
+                //console.log(date);
             }
         },  
         computed: {
@@ -74,7 +82,7 @@
                 'chartOptionsPie',
                 'chartDataHeaderPie',
                 'updatedChartDataPie',
-                'dateForData'
+                'dataFromBase'
             ]),
             chartDataLine () {
                 return [ this.chartDataHeaderLine, ...this.updatedChartDataLine ]
@@ -84,6 +92,12 @@
             }
         },
         created () {
+            // axios({ method: "GET", "url": "http://localhost:52832/api/stats?date=" + moment(state.dateForData).format('YYYY-MM-DD') }).then(result => {
+            //   console.log(result);
+            //   this.$store.commit('updateData', result);
+            // }, error => {
+            //   console.error(error);
+            // });
             this.$store.commit('updateDataLine');
             this.$store.commit('updateDataPie');
         }
