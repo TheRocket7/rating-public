@@ -64,6 +64,9 @@
 </template>
 
 <script>
+    import axios from "axios";
+    import moment from "moment";
+
     export default {
         name: 'RateUs',
         props: {
@@ -76,6 +79,17 @@
         },
         methods: {
             clickRateSmile() {
+                let dataToSend = {
+                    RatingValueId: 1, 
+                    User: 'Tester', 
+                    Date: moment().format('YYYY-MM-DD')
+                    };
+                axios({ method: "POST", "url": "http://localhost:52832/api/ratings", data: dataToSend }).then(result => {
+                  console.log(result);
+         //         this.$store.commit('updateData', result);
+                 }, error => {
+                   console.error(error);
+                 });
                 this.$refs['message-modal'].show()
                 setTimeout(() => {
                     this.$refs['message-modal'].hide()
