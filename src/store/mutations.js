@@ -37,9 +37,5 @@ export default {
       console.log(state.chartDataRowsPie);
 
       state.updatedChartDataPie = state.chartDataRowsPie;
-    },
-
-    updateData(state, dataRequest) {
-      state.dataFromBase = dataRequest.data;
     }
   };

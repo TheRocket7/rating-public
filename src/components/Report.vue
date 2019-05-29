@@ -20,27 +20,11 @@
                     </tbody>
                     </table>
             </div>
-            <div class="col-xl-6">
-                <GChart
-                    type="PieChart"
-                    :data="chartDataPie"
-                    :options="chartOptionsPie"
-                />
-            </div>
-        </div>
-        <div class="col-xl-12">
-            <GChart
-                type="LineChart"
-                :data="chartDataLine"
-                :options="chartOptionsLine"
-            />
         </div>
     </div>
 </template>
 
 <script>
-    import { GChart } from 'vue-google-charts'
-    import Datepicker from 'vuejs-datepicker'
     import { mapMutations, mapState } from 'vuex'
     import axios from "axios";
     import moment from "moment";
@@ -57,16 +41,16 @@
             }
         },
         components: {
-            GChart,
-            Datepicker
         },
         methods: {
             pullData(date) {
                 axios({ method: "GET", "url": "http://localhost:52832/api/stats?date=" + moment(date).format('YYYY-MM-DD') })
                     .then((result) => {
-                        this.$store.commit('updateData', result);
-                        this.$store.commit('updateDataLine');
-                        this.$store.commit('updateDataPie');
+                        this.$store.commit('updateData', result)
+                        .then(response => {
+                            this.$store.commit('updateDataLine');
+                            this.$store.commit('updateDataPie');
+                        })
                         this.tableData = this.updatedChartDataPie;
                     }, error => {
                         console.error(error);
@@ -91,6 +75,17 @@
             }
         },
         created () {
+            axios({ method: "GET", "url": "http://localhost:52832/api/stats?date=" + moment(new Date()).format('YYYY-MM-DD') })
+                    .then((result) => {
+                        this.$store.commit('updateData', result)
+                        .then(response => {
+                            this.$store.commit('updateDataLine');
+                            this.$store.commit('updateDataPie');
+                        })
+                        this.tableData = this.updatedChartDataPie;
+                    }, error => {
+                        console.error(error);
+                    });
         }
     }
 </script>

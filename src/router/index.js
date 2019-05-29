@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import StartPage from '@/components/StartPage'
+import RateUs from '@/components/RateUs'
 import Statistics from './../components/Statistics'
 
 Vue.use(Router)
@@ -9,8 +9,8 @@ export default new Router({
   routes: [
     {
       path: '/',
-      name: 'Start page',
-      component: StartPage
+      name: 'Rate Us',
+      component: RateUs
     },
     {
       path: '/statistics',

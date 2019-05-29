@@ -9,19 +9,19 @@ import 'bootstrap-vue/dist/bootstrap-vue.css'
 import { library, dom } from '@fortawesome/fontawesome-svg-core'
 import { faCheckCircle, faChartLine, faCogs, faGrin, faSmile, faMeh, faFrown, faSadTear, faArrowLeft } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-import VueGoogleCharts from 'vue-google-charts'
-import store from "./store";
-import GAuth from 'vue-google-oauth2';
+import store from "./store/store";
+import GAuth from 'vue-google-oauth2'
+import Vuetify from 'vuetify'
 
 const gauthOption = {
-  clientId: 'CLIENT_ID.apps.googleusercontent.com',
-  scope: 'profile email',
+  clientId: '243430777574-dkmhg209s5qhuj6r3uv6j2pelnfdjvg9.apps.googleusercontent.com',
+  scope: 'openid%20email%20profile',
   prompt: 'select_account'
 }
 
 dom.watch()
 
-Vue.use(BootstrapVue, VueGoogleCharts, GAuth, gauthOption);
+Vue.use(Vuetify, BootstrapVue, GAuth, gauthOption);
 
 library.add(faCheckCircle, faChartLine, faCogs, faGrin, faSmile, faMeh, faFrown, faSadTear, faArrowLeft);
 
