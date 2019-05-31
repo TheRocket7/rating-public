@@ -9,7 +9,7 @@ import 'bootstrap-vue/dist/bootstrap-vue.css'
 import { library, dom } from '@fortawesome/fontawesome-svg-core'
 import { faCheckCircle, faChartLine, faCogs, faGrin, faSmile, faMeh, faFrown, faSadTear, faArrowLeft } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-import store from "./store/store";
+import store from "./store/store"
 import GAuth from 'vue-google-oauth2'
 import Vuetify from 'vuetify'
 

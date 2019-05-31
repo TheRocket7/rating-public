@@ -4,7 +4,7 @@
             <div class="col-xl-5 text-div">
                 <span class="text-title">Today is a new day. Check your ratings!</span>
                 <div class="text-small-div">
-                    <span class="text-small">Graphs presents you rating results. Today you have 255 rates, check it on dashboard.</span>
+                    <span class="text-small">Graphs presents you rating results. Today you have {{ allRates }} rates, check it on dashboard.</span>
                 </div>
             </div>
             <div class="col-xl-7">
@@ -16,17 +16,48 @@
         <div class="row">
             <div class="col-xl-12">
                 <div class="col-xl-9 line-chart-div">
-                    <div class="col-xl-12 line-chart-div-in"></div>
+                    <div class="col-xl-12 line-chart-div-in">
+                        <div class="col-xl-12 chart-header">
+                            <div class="col-xl-6 chart-title-div">
+                                <span class="chart-area-title">Ratings</span>
+                            </div>
+                            <div class="col-xl-6 align-right">
+                                <v-icon>more_vert</v-icon>
+                            </div>
+                        </div>
+                        <div class="col-xl-12">
+                            <line-chart
+                                v-if="loaded"
+                                :chartdata="chartDataLine"
+                                :options="options"
+                                :height="305"/>
+                        </div>
+                    </div>
                 </div>
                 <div class="col-xl-3 pie-chart-div">
+                    <div class="col-xl-12 chart-header">
+                        <div class="col-xl-6 chart-title-div">
+                            <span class="chart-area-title">Ratings</span>
+                        </div>
+                        <div class="col-xl-6 align-right">
+                            <v-icon>more_vert</v-icon>
+                        </div>
+                    </div>
+                    <div class="col-xl-12">
+                        <pie-chart
+                            v-if="loaded"
+                            :chartdata="chartDataPie"
+                            :options="options"
+                            :height="295"/>
+                    </div>
                 </div>
             </div>
         </div>
         <div class="row">
             <div class="col-xl-6">
                 <v-data-table
-                    :headers="headers"
-                    :items="desserts"
+                    :headers="tableData.headers"
+                    :items="tableData.rates"
                     class="elevation-1"
                     hide-actions
                 >
@@ -44,123 +75,54 @@
                     </template>
                     <template v-slot:items="props">
                         <td class="text-xs-left">{{ props.item.name }}</td>
-                        <td class="text-xs-left">{{ props.item.calories }}</td>
+                        <td class="text-xs-left">{{ props.item.count }}</td>
                     </template>
                 </v-data-table>
-                <!-- <table class="table lm-30">
-                    <thead>
-                        <tr>
-                            <th scope="col">Emotion</th>
-                            <th scope="col">Count</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr v-for="emotion in tableData" :key="emotion[0]">
-                            <th scope="row">{{emotion[0]}}</th>
-                            <td>{{ emotion[1] }}</td>
-                        </tr>
-                    </tbody>
-                </table> -->
             </div>
         </div>
     </div>
 </template>
 
 <script>
-    import { mapMutations, mapState } from 'vuex';
-    import axios from "axios";
-    import moment from "moment";
+    import { mapGetters, mapMutations } from 'vuex';
+    import LineChart from './charts/LineChart';
+    import PieChart from './charts/PieChart';
+    import * as types from './../store/types';
 
     export default {
         name: 'Today',
-        props: {
-            settings: Object
+        components: {
+            LineChart,
+            PieChart
         },
         data () {
             return {
-                tableData: [],
-                date: new Date(),
-                headers: [
-          {
-            text: 'Dessert (100g serving)',
-            align: 'left',
-            sortable: true,
-            value: 'name'
-          },
-          { text: 'Calories', value: 'calories' },
-        ],
-        desserts: [
-          {
-            name: 'Frozen Yogurt',
-            calories: 159,
-            fat: 6.0,
-            carbs: 24,
-            protein: 4.0,
-            iron: '1%'
-          },
-          {
-            name: 'Ice cream sandwich',
-            calories: 237,
-            fat: 9.0,
-            carbs: 37,
-            protein: 4.3,
-            iron: '1%'
-          },
-          {
-            name: 'Eclair',
-            calories: 262,
-            fat: 16.0,
-            carbs: 23,
-            protein: 6.0,
-            iron: '7%'
-          }
-        ]
+                loaded: false
             }
         },
+        async mounted() {
+            this.loaded = false;
+            this.pullData();
+        },
         methods: {
-            // pullData() {
-            //     axios({ method: "GET", "url": "http://localhost:52832/api/stats?date=" + moment(new Date()).format('YYYY-MM-DD') })
-            //         .then((result) => {
-            //             this.$store.commit('updateData', result)
-            //             .then(response => {
-            //                 this.$store.commit('updateDataLine');
-            //                 this.$store.commit('updateDataPie');
-            //             })
-            //             this.tableData = this.updatedChartDataPie;
-            //         }, error => {
-            //             console.error(error);
-            //         });
-            // }
+            ...mapMutations ({
+                fillData: types.MUTATE_UPDATE_DATA
+            }),
+            pullData() {
+                this.fillData(new Date());
+                setTimeout(() => {
+                    this.loaded = true;
+                }, 2000);
+            }
         },  
         computed: {
-            // ...mapState([
-            //     'chartOptionsLine',
-            //     'chartDataHeaderLine',
-            //     'updatedChartDataLine',
-            //     'chartOptionsPie',
-            //     'chartDataHeaderPie',
-            //     'updatedChartDataPie',
-            //     'dataFromBase'
-            // ]),
-            // chartDataLine () {
-            //     return [ this.chartDataHeaderLine, ...this.updatedChartDataLine ]
-            // },
-            // chartDataPie () {
-            //     return [ this.chartDataHeaderPie, ...this.updatedChartDataPie ]
-            // }
-        },
-        created () {
-            // axios({ method: "GET", "url": "http://localhost:52832/api/stats?date=" + moment(new Date()).format('YYYY-MM-DD') })
-            //         .then((result) => {
-            //             this.$store.commit('updateData', result)
-            //             .then(response => {
-            //                 this.$store.commit('updateDataLine');
-            //                 this.$store.commit('updateDataPie');
-            //             })
-            //             this.tableData = this.updatedChartDataPie;
-            //         }, error => {
-            //             console.error(error);
-            //         });
+            ...mapGetters({
+                chartDataLine: types.LINE_CHART_DATA,
+                chartDataPie: types.PIE_CHART_DATA,
+                tableData: types.TABLE_DATA,
+                options: types.OPTIONS,
+                allRates: types.ALL_RATES
+            }),
         }
     }
 </script>
@@ -223,5 +185,26 @@
         margin-top: -370px;
         float: right;
         border-radius: 10px;
+    }
+    .align-right {
+        text-align: right;
+        padding-right: 0px;
+    }
+    .chart-header {
+        padding-top: 15px;
+        display: inline-flex;
+    }
+    .chart-title-div {
+        text-align: left;
+        padding-left: 0px;
+    }
+    .chart-area-title {
+        color: rgba(255, 255, 255, 0.85);
+        font-family: Roboto;
+        font-size: 16px;
+        font-weight: 500;
+        line-height: 19px;
+        width: 1221px;
+        text-align: left;
     }
 </style>

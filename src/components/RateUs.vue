@@ -74,7 +74,7 @@
     import axios from "axios";
     import moment from "moment";
     import {mapGetters} from 'vuex';
-    import * as types from './../store/types'
+    import * as types from './../store/types';
 
     export default {
         name: 'RateUs',

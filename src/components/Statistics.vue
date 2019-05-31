@@ -31,7 +31,7 @@
                             <div style="padding-right: 2px">Reports</div>
                         </v-list-tile-action>
                     </v-list-tile>
-                    <v-list-tile class="settings-padding">
+                    <v-list-tile class="settings-padding" @click="goToSettings()">
                         <v-list-tile-action>
                             <v-icon style="padding-right: 14px">settings</v-icon>
                             <div style="padding-right: 1px">Settings</div>
@@ -105,14 +105,8 @@
             Today
         },
         methods: {
-            goBack() {
-                this.$router.push({name:'Start page'});
-            },
-            updateTodayCharts() {
-                this.$refs.today.pullData();
-            },
-            updateReportCharts() {
-                this.$refs.report.pullData(new Date());
+            goToSettings() {
+                this.$router.push({name:'Settings'});
             }
         }
     }
@@ -131,7 +125,7 @@
         padding-right: 45px !important;
     }
     .settings-padding {
-        margin-top: 59em;
+        margin-top: 66em;
         margin-bottom: 0.5em;
     }
     .tab-content {

@@ -1,98 +1,190 @@
 <template>
     <div class="report">
-        <div class="lm-30 mb-20">
-            <datepicker v-model="date" name="TakeData" @selected="pullData"></datepicker>
+        <div>
+            <v-flex xs12 sm6 md4>
+                <v-menu
+                    ref="menu"
+                    v-model="menu"
+                    :close-on-content-click="false"
+                    :nudge-right="40"
+                    :return-value.sync="date"
+                    lazy
+                    transition="scale-transition"
+                    offset-y
+                    full-width
+                    min-width="290px"
+                >
+                    <template v-slot:activator="{ on }">
+                        <v-text-field
+                            v-model="date"
+                            prepend-icon="event"
+                            readonly
+                            v-on="on"
+                        >
+                        </v-text-field>
+                    </template>
+                    <v-date-picker v-model="date" no-title scrollable>
+                        <v-spacer></v-spacer>
+                        <v-btn flat color="primary" @click="menu = false">Cancel</v-btn>
+                        <v-btn flat color="primary" @click="pullData(date)">OK</v-btn>
+                    </v-date-picker>
+                </v-menu>
+            </v-flex>
+        </div>
+        <div class="row">
+            <div class="col-xl-12">
+                <div class="col-xl-9 line-chart-div">
+                    <div class="col-xl-12 line-chart-div-in">
+                        <div class="col-xl-12 chart-header">
+                            <div class="col-xl-6 chart-title-div">
+                                <span class="chart-area-title">Ratings</span>
+                            </div>
+                            <div class="col-xl-6 align-right">
+                                <v-icon>more_vert</v-icon>
+                            </div>
+                        </div>
+                        <div class="col-xl-12">
+                            <line-chart
+                                v-if="loaded"
+                                :chartdata="chartDataLine"
+                                :options="options"
+                                :height="305"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-3 pie-chart-div">
+                    <div class="col-xl-12 chart-header">
+                        <div class="col-xl-6 chart-title-div">
+                            <span class="chart-area-title">Ratings</span>
+                        </div>
+                        <div class="col-xl-6 align-right">
+                            <v-icon>more_vert</v-icon>
+                        </div>
+                    </div>
+                    <div class="col-xl-12">
+                        <pie-chart
+                            v-if="loaded"
+                            :chartdata="chartDataPie"
+                            :options="options"
+                            :height="295"/>
+                    </div>
+                </div>
+            </div>
         </div>
         <div class="row">
             <div class="col-xl-6">
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th scope="col">Emotion</th>
-                            <th scope="col">Count</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr v-for="emotion in tableData" :key="emotion[0]">
-                            <th scope="row">{{emotion[0]}}</th>
-                            <td>{{ emotion[1] }}</td>
-                        </tr>
-                    </tbody>
-                    </table>
+                <v-data-table
+                    :headers="tableData.headers"
+                    :items="tableData.rates"
+                    class="elevation-1"
+                    hide-actions
+                >
+                    <template slot="headerCell" slot-scope="props">
+                        <v-tooltip bottom>
+                            <template v-slot:activator="{ on }">
+                                <span v-on="on">
+                                    {{ props.header.text }}
+                                </span>
+                            </template>
+                            <span>
+                                {{ props.header.text }}
+                            </span>
+                        </v-tooltip>
+                    </template>
+                    <template v-slot:items="props">
+                        <td class="text-xs-left">{{ props.item.name }}</td>
+                        <td class="text-xs-left">{{ props.item.count }}</td>
+                    </template>
+                </v-data-table>
             </div>
         </div>
     </div>
 </template>
 
 <script>
-    import { mapMutations, mapState } from 'vuex'
-    import axios from "axios";
-    import moment from "moment";
+    import { mapMutations, mapGetters } from 'vuex'
+    import LineChart from './charts/LineChart';
+    import PieChart from './charts/PieChart';
+    import * as types from './../store/types';
 
     export default {
         name: 'Report',
-        props: {
-            settings: Object
-        },
         data () {
             return {
-                tableData: [],
-                date: new Date()
+                date: new Date().toISOString().substr(0, 10),
+                menu: false,
+                loaded: false
             }
         },
         components: {
+            LineChart,
+            PieChart
+        },
+        async mounted() {
+            this.pullData(new Date());
         },
         methods: {
+            ...mapMutations ({
+                fillData: types.MUTATE_UPDATE_DATA
+            }),
             pullData(date) {
-                axios({ method: "GET", "url": "http://localhost:52832/api/stats?date=" + moment(date).format('YYYY-MM-DD') })
-                    .then((result) => {
-                        this.$store.commit('updateData', result)
-                        .then(response => {
-                            this.$store.commit('updateDataLine');
-                            this.$store.commit('updateDataPie');
-                        })
-                        this.tableData = this.updatedChartDataPie;
-                    }, error => {
-                        console.error(error);
-                    });
+                this.loaded = false;
+                this.fillData(date);
+                setTimeout(() => {
+                    this.loaded = true;
+                }, 2000);
             }
         },  
         computed: {
-            ...mapState([
-                'chartOptionsLine',
-                'chartDataHeaderLine',
-                'updatedChartDataLine',
-                'chartOptionsPie',
-                'chartDataHeaderPie',
-                'updatedChartDataPie',
-                'dataFromBase'
-            ]),
-            chartDataLine () {
-                return [ this.chartDataHeaderLine, ...this.updatedChartDataLine ]
-            },
-            chartDataPie () {
-                return [ this.chartDataHeaderPie, ...this.updatedChartDataPie ]
-            }
-        },
-        created () {
-            axios({ method: "GET", "url": "http://localhost:52832/api/stats?date=" + moment(new Date()).format('YYYY-MM-DD') })
-                    .then((result) => {
-                        this.$store.commit('updateData', result)
-                        .then(response => {
-                            this.$store.commit('updateDataLine');
-                            this.$store.commit('updateDataPie');
-                        })
-                        this.tableData = this.updatedChartDataPie;
-                    }, error => {
-                        console.error(error);
-                    });
+            ...mapGetters({
+                chartDataLine: types.LINE_CHART_DATA,
+                chartDataPie: types.PIE_CHART_DATA,
+                tableData: types.TABLE_DATA,
+                options: types.OPTIONS,
+                allRates: types.ALL_RATES
+            }),
         }
     }
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-    .mb-20 {
+    .line-chart-div {
+        height: 350px;
         margin-bottom: 20px;
+        padding-left: 0px;
+    }
+    .line-chart-div-in {
+        height: 350px;
+        background: #424242;
+        border-radius: 10px;
+    }
+    .pie-chart-div {
+        height: 350px;
+        background: #424242;
+        margin-top: -370px;
+        float: right;
+        border-radius: 10px;
+    }
+    .align-right {
+        text-align: right;
+        padding-right: 0px;
+    }
+    .chart-header {
+        padding-top: 15px;
+        display: inline-flex;
+    }
+    .chart-title-div {
+        text-align: left;
+        padding-left: 0px;
+    }
+    .chart-area-title {
+        color: rgba(255, 255, 255, 0.85);
+        font-family: Roboto;
+        font-size: 16px;
+        font-weight: 500;
+        line-height: 19px;
+        width: 1221px;
+        text-align: left;
     }
 </style>
