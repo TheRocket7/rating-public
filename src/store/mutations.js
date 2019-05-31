@@ -49,32 +49,42 @@ export default {
 
   //Update number of rates
   [types.UPDATE_NUMBER_OF_RATES]: (state, payload) => {
+    state.settingToUpdate = 'numberOfRates';
     state.settingsData.numberOfRates = Number(payload);
   },
 
   //Update text message
   [types.UPDATE_TEXT_MESSAGE]: (state, payload) => {
+    state.settingToUpdate = 'thanksMessage';
     state.settingsData.thanksMessage = payload;
   },
 
   //Update tumeout
   [types.UPDATE_TIMEOUT]: (state, payload) => {
+    state.settingToUpdate = 'modalWait';
     state.settingsData.modalWait = Number(payload);
   },
 
   //Save settings in base
   [types.SAVE_SETTINGS]: (state) => {
-    axios({ method: "SET", "url": "http://localhost:52832/api/setting" })
-      .then((result) => {
-        console.log(result);
-      });
+    if (state.settingToUpdate){
+      axios({ method: "PUT", "url": "http://localhost:52832/api/settings", data: { Title: state.settingToUpdate, Value: state.settingsData[state.settingToUpdate] } })
+        .then(result => {
+            console.log(result);
+        }, error => {
+            console.error(error);
+        }); 
+    }
   },
-
   //Load settings from base
   [types.LOAD_SETTINGS]: (state) => {
-    axios({ method: "GET", "url": "http://localhost:52832/api/setting" })
+    axios({ method: "GET", "url": "http://localhost:52832/api/settings" })
       .then((result) => {
         console.log(result);
+        state.settingsData.thanksMessage = result.data.filter(item => item.Title == 'thanksMessage')[0].Value;
+        state.settingsData.numberOfRates = Number(result.data.filter(item => item.Title == 'numberOfRates')[0].Value);
+        state.settingsData.modalWait = Number(result.data.filter(item => item.Title == 'modalWait')[0].Value);
+        console.log( state.settingsData);
       });
   }
 };

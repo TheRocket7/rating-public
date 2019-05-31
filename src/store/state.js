@@ -5,6 +5,7 @@ export default {
     numberOfRates: 5,
     modalWait: 5
   },
+  settingToUpdate: '',
   //Data for table
   tableData: {
     headers: [
