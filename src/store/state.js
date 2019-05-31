@@ -109,5 +109,20 @@ export default {
     }
   },
   //Sum of all rates for today
-  allRates: 0
+  allRates: 0,
+  //Validation rules for field number of rates
+  numberOfRatesRules: [
+      v => v >= 3 || `Can't be less than 3 emotions`,
+      v => v <= 5 || `Can't be more than 5 emotions`
+  ],
+  //Validation rules for field message text
+  messageTextRules: [
+      v => (v.length >= 3 || v.length == 0) || `Minimum length is 3 characters`,
+      v => v.length <= 120 || `Maximum length is 120 characters`
+  ],
+  //Validation rules for field timeout
+  timeoutRules: [
+      v => v >= 1 || `Timeout can't be 0`,
+      v => v <= 10 || `Timeout can't be longer than 10 seconds`
+  ]
 };

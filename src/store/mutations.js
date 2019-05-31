@@ -45,5 +45,36 @@ export default {
       }, error => {
         console.error(error);
       });
+  },
+
+  //Update number of rates
+  [types.UPDATE_NUMBER_OF_RATES]: (state, payload) => {
+    state.settingsData.numberOfRates = Number(payload);
+  },
+
+  //Update text message
+  [types.UPDATE_TEXT_MESSAGE]: (state, payload) => {
+    state.settingsData.thanksMessage = payload;
+  },
+
+  //Update tumeout
+  [types.UPDATE_TIMEOUT]: (state, payload) => {
+    state.settingsData.modalWait = Number(payload);
+  },
+
+  //Save settings in base
+  [types.SAVE_SETTINGS]: (state) => {
+    axios({ method: "SET", "url": "http://localhost:52832/api/setting" })
+      .then((result) => {
+        console.log(result);
+      });
+  },
+
+  //Load settings from base
+  [types.LOAD_SETTINGS]: (state) => {
+    axios({ method: "GET", "url": "http://localhost:52832/api/setting" })
+      .then((result) => {
+        console.log(result);
+      });
   }
 };

@@ -73,7 +73,7 @@
 <script>
     import axios from "axios";
     import moment from "moment";
-    import {mapGetters} from 'vuex';
+    import {mapGetters, mapMutations} from 'vuex';
     import * as types from './../store/types';
 
     export default {
@@ -84,7 +84,13 @@
                 showMessage: false
             }
         },
+        async mounted() {
+            this.loadSettings();
+        },
         methods: {
+            ...mapMutations({
+                loadSettings: types.LOAD_SETTINGS
+            }),
             clickRateSmile(rateID) {
                 console.log(rateID);
                 let dateForBase = moment(new Date()).toDate();
